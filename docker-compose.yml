@@ -1,0 +1,21 @@
+version: "1.0"
+services:
+  rvc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rvc
+    volumes:
+      - ./weights:/opt/Retrieval-based-Voice-Conversion-WebUI/weights
+      - ./logs:/opt/Retrieval-based-Voice-Conversion-WebUI/logs
+      - ./opt:/opt/Retrieval-based-Voice-Conversion-WebUI/opt
+      - ./stuff:/opt/Retrieval-based-Voice-Conversion-WebUI/stuff
+    ports:
+      - 7865:7865
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

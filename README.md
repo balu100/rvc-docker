@@ -16,3 +16,6 @@ Logs
 Opt  
 Weights  
 Stuff  
+
+## Errors
+cant find mute: unzip mute.7z to logs folder

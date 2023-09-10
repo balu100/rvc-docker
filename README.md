@@ -8,7 +8,7 @@ Latest Nvidia Driver (https://www.nvidia.com/download/index.aspx) Or GeForce Exp
 Latest Cuda Toolkit (https://developer.nvidia.com/cuda-downloads)  
 
 ## How to run
-download docker-compose.yml and Dockerfile  
+Download docker-compose.yml and Dockerfile  
 docker compose up -d  
 
 ## Volumes

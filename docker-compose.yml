@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
     container_name: rvc
     volumes:
       - ./weights:/opt/Retrieval-based-Voice-Conversion-WebUI/weights

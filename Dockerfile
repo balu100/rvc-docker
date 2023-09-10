@@ -1,4 +1,4 @@
-FROM pytorch/pytorch:latest
+FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
 
 #Expose infer-web port 7865
 EXPOSE 7865
@@ -7,7 +7,10 @@ EXPOSE 7865
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies
-RUN apt update && apt-get install -y --no-install-recommends -o Dpkg::Options::="--force-confold" ffmpeg aria2 g++ git gcc && apt clean
+RUN apt update && apt-get install -y --no-install-recommends -o Dpkg::Options::="--force-confold" ffmpeg aria2 g++ git gcc python3 python3-dev python3-pip && apt clean
+
+# python
+RUN pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu121
 
 #Clone
 RUN git -C /opt clone https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI.git
@@ -24,13 +27,14 @@ RUN aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co
 RUN aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/uvr5_weights/HP5-主旋律人声vocals+其他instrumentals.pth -d /opt/Retrieval-based-Voice-Conversion-WebUI/assets/uvr5_weights/ -o HP5-主旋律人声vocals+其他instrumentals.pth
 RUN aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/hubert_base.pt -d /opt/Retrieval-based-Voice-Conversion-WebUI/assets/hubert -o hubert_base.pt
 RUN aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/rmvpe.pt -d /opt/Retrieval-based-Voice-Conversion-WebUI/assets/hubert -o rmvpe.pt
+RUN aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/rmvpe.pt -d /opt/Retrieval-based-Voice-Conversion-WebUI/assets/rmvpe -o rmvpe.pt
 
 # Install dependencies
 RUN pip install -r /opt/Retrieval-based-Voice-Conversion-WebUI/requirements.txt
 RUN pip install poetry
 
-#Define Volumes
+# Define Volumes
 VOLUME [ "/opt/Retrieval-based-Voice-Conversion-WebUI/weights", "/opt/Retrieval-based-Voice-Conversion-WebUI/logs" ]
 
 # Run
-CMD [ "python", "infer-web.py" ]
+CMD [ "python3", "infer-web.py" ]
